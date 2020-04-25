@@ -79,7 +79,10 @@ class Align(Aligner):
             face = image[roi[1] + abs(offset[1]): roi[3] + abs(offset[1]),
                          roi[0] + abs(offset[0]): roi[2] + abs(offset[0])]
             interpolation = cv2.INTER_CUBIC if face.shape[0] < self.input_size else cv2.INTER_AREA
-            face = cv2.resize(face, dsize=sizes, interpolation=interpolation)
+            if face.size == 0:
+                face = np.zeros(shape=[self.input_size, self.input_size, 3], dtype=np.uint8)
+            else:
+                face = cv2.resize(face, dsize=sizes, interpolation=interpolation)
             faces.append(face)
             rois.append(roi)
             offsets.append(offset)
